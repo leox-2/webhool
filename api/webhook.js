@@ -6,15 +6,15 @@ export default function handler(req, res) {
     const token = req.query["hub.verify_token"];
     const challenge = req.query["hub.challenge"];
 
-    if (mode === "subscribe" && token === VERIFY_TOKEN) {
+    if (mode && token === VERIFY_TOKEN) {
       res.status(200).send(challenge);
     } else {
       res.sendStatus(403);
     }
-  }
-
-  if (req.method === "POST") {
-    console.log("Webhook received:", req.body);
+  } else if (req.method === "POST") {
+    console.log("Received webhook:", req.body);
     res.sendStatus(200);
+  } else {
+    res.sendStatus(405); // Method Not Allowed
   }
 }
